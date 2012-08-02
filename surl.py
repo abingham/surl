@@ -11,6 +11,8 @@ def run(filenames):
         for idx, m in enumerate(re.finditer(url_regex, line)):
             results.append(line[m.start(): m.end()])
 
+    sys.stdin = open('/dev/tty', 'r')
+
     print('== URLS ==')
     for i, s in enumerate(results):
         print('{}\t{}'.format(i, s))
