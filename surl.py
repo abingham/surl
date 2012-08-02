@@ -5,11 +5,17 @@ import sys
 
 url_regex = re.compile("(((https?|ftp|gopher)://|(mailto|file|news):)[^' <>\"]+|(www|web|w3).[-a-z0-9.]+)[^' .,;<>\":]")
 
+def remove_dups(seq):
+    rslt = []
+    for x in seq:
+        if x not in rslt:
+            rslt.append(x)
+    return rslt
+
 def run(filenames):
-    results = []
-    for line in fileinput.input(filenames):
-        for idx, m in enumerate(re.finditer(url_regex, line)):
-            results.append(line[m.start(): m.end()])
+    lines = fileinput.input(filenames)
+    results = remove_dups(
+        [l[m.start():m.end()] for l in lines for m in re.finditer(url_regex, l)])
 
     sys.stdin = open('/dev/tty', 'r')
 
